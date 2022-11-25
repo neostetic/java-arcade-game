@@ -1,9 +1,5 @@
 ### java-arcade-game
-![image](https://raw.githubusercontent.com/neostetic/neostetic/main/assets/tag_html.png)
-![image](https://raw.githubusercontent.com/neostetic/neostetic/main/assets/tag_javascript.png)
-![image](https://raw.githubusercontent.com/neostetic/neostetic/main/assets/tag_css.png)
 ![image](https://raw.githubusercontent.com/neostetic/neostetic/main/assets/tag_java.png)
-![image](https://raw.githubusercontent.com/neostetic/neostetic/main/assets/tag_node.png)
 
 ![image](https://user-images.githubusercontent.com/83291717/167313695-a7a8e267-0fa4-46d2-9ec4-57e1bce682ec.png)
 
