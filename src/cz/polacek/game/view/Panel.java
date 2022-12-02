@@ -44,12 +44,11 @@ public class Panel extends JPanel implements Runnable {
         if (keyHandler.leftPressed) { playerX -= config.playerSpeed; }
         if (keyHandler.rightPressed) { playerX += config.playerSpeed; }
 
-
         if (playerY < 0) { playerY = 0; }
         else if (playerY > (config.windowHeight - config.tileComputed)) { playerY = (config.windowHeight - config.tileComputed); }
         if (playerX < 0) { playerX = 0; }
         else if (playerX > (config.windowWidth - config.tileComputed)) { playerX = (config.windowWidth - config.tileComputed); }
-        System.out.println(config.windowWidth - config.tileComputed + " : " + config.windowWidth);
+        System.out.println(config.windowWidth - config.tileComputed + " : " + config.windowWidth + " : " + config.tileComputed + " : " + playerX);
     }
 
     public void paintComponent(Graphics graphics) {
