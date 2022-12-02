@@ -17,7 +17,7 @@ public class Panel extends JPanel implements Runnable {
     private int playerY = 0;
 
     public Panel() {
-        this.setPreferredSize(new Dimension(config.windowWidth, config.windowHeight));
+        this.setSize(new Dimension(config.windowWidth, config.windowHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true); // Better render
         this.setLayout(null);
@@ -39,23 +39,45 @@ public class Panel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (keyHandler.upPressed) { playerY -= config.playerSpeed; }
-        if (keyHandler.downPressed) { playerY += config.playerSpeed; }
-        if (keyHandler.leftPressed) { playerX -= config.playerSpeed; }
-        if (keyHandler.rightPressed) { playerX += config.playerSpeed; }
+
+        System.out.println("x:" + playerX + " y:" + playerY + " w:" + (super.getWidth()) + " h:" + (super.getHeight()));
+        if (keyHandler.upPressed) {
+            playerY -= config.playerSpeed;
+        }
+        if (keyHandler.downPressed) {
+            playerY += config.playerSpeed;
+        }
+        if (keyHandler.leftPressed) {
+            playerX -= config.playerSpeed;
+        }
+        if (keyHandler.rightPressed) {
+            playerX += config.playerSpeed;
+        }
+
+        if (playerY < 0) {
+            playerY = 0;
+            return;
+        }
+        if (playerY > (config.windowHeight - config.tileComputed)) {
+            playerY = (config.windowHeight - config.tileComputed);
+            return;
+        }
+        if (playerX < 0) {
+            playerX = 0;
+            return;
+        }
+        if (playerX + config.tileComputed > (config.windowWidth)) {
+            playerX = (config.windowWidth - config.tileComputed);
+            return;
+        }
 
 
-        if (playerY < 0) { playerY = 0; }
-        else if (playerY > (config.windowHeight - config.tileComputed)) { playerY = (config.windowHeight - config.tileComputed); }
-        if (playerX < 0) { playerX = 0; }
-        else if (playerX > (config.windowWidth - config.tileComputed)) { playerX = (config.windowWidth - config.tileComputed); }
-        System.out.println(config.windowWidth - config.tileComputed + " : " + config.windowWidth);
     }
 
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.setColor(Color.WHITE);
+        graphics2D.setColor(Color.RED);
         graphics2D.fillRect(playerX, playerY, config.tileComputed, config.tileComputed);
         graphics2D.dispose();
     }
