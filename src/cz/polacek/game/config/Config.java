@@ -8,7 +8,8 @@ public  class Config {
     static public boolean windowVisible = true;
     static public int scale = 2;
     static public int tile = 16;
-    static public int playerSpeed = (tile / 2) * scale;
+    static public double playerSpeed = (tile / 8) * scale;
+    static public double gravity = 1.02;
     static public int tileComputed = tile * scale;
     static public int windowWidth = (tileComputed * 20);
     static public int windowHeight = (tileComputed * 15);
