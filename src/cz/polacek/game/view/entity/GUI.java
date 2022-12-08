@@ -16,9 +16,7 @@ public class GUI extends Entity {
     Player player;
     public BufferedImage[][] sprites;
 
-    int heart1 = 1;
-    int heart2 = 1;
-    int heart3 = 1;
+    int heart1,heart2,heart3,shield1,shield2;
 
     public GUI(Panel panel, KeyHandler keyHandler, Player player) {
         this.panel = panel;
@@ -50,11 +48,25 @@ public class GUI extends Entity {
                 heart3 = 1;
             }
         }
+        switch (player.getPLAYER_SHIELD()) {
+            case 2 -> {
+                shield1 = 2;
+                shield2 = 2;
+            } case 1 -> {
+                shield1 = 2;
+                shield2 = 3;
+            } default -> {
+                shield1 = 3;
+                shield2 = 3;
+            }
+        }
     }
 
     public void draw(Graphics2D graphics2D) {
         graphics2D.drawImage(sprites[heart1][6], 0, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
         graphics2D.drawImage(sprites[heart2][6], Config.tileComputed, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
         graphics2D.drawImage(sprites[heart3][6], Config.tileComputed * 2, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
+        graphics2D.drawImage(sprites[shield1][6], Config.tileComputed * 3, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
+        graphics2D.drawImage(sprites[shield1][6], Config.tileComputed * 4, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
     }
 }
