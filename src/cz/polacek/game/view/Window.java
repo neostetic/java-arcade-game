@@ -10,8 +10,8 @@ public class Window {
     protected Settings settings = new Settings(frame, panel);
 
     public Window() {
-        panel.startGameThread();
         settings.settings();
+        panel.startGameThread();
     }
 
 }

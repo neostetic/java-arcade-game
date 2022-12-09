@@ -2,18 +2,16 @@ package cz.polacek.game.config;
 
 public  class Config {
 
-    // Window/Screen Settings
-    public String windowTitle = "Game";
-    public boolean windowResizable = true;
-    public boolean windowVisible = true;
-    public int scale = 2;
-    public int tile = 32;
-    public int playerSpeed = 10 * scale;
-    public int tileComputed = tile * scale;
-    public int windowWidth = (tileComputed * 20);
-    public int windowHeight = (tileComputed * 15);
-
-    // Utils Settings
-    public String srcOut = "src/cz/polacek/game/assets/"; // I just wanted to have smaller Image Sources
+    static public String windowTitle = "Game";
+    static public boolean windowResizable = false;
+    static public boolean windowVisible = true;
+    static public int scale = 3;
+    static public int tile = 16;
+    static public double playerSpeed = (tile / 10) * scale;
+    static public double playerSpeedSlowdown = 16;
+    static public double gravity = 1.01;
+    static public int tileComputed = tile * scale;
+    static public int windowWidth = (tileComputed * 20);
+    static public int windowHeight = (tileComputed * 15);
 
 }
