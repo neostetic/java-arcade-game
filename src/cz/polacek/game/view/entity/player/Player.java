@@ -3,6 +3,7 @@ package cz.polacek.game.view.entity.player;
 import cz.polacek.game.config.Config;
 import cz.polacek.game.utils.SpritesheetUtils;
 import cz.polacek.game.view.Panel;
+import cz.polacek.game.view.entity.Background;
 import cz.polacek.game.view.entity.Entity;
 import cz.polacek.game.view.keylistener.KeyHandler;
 
@@ -18,9 +19,9 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     BufferedImage[][] sprites;
 
-    Thread bulletInterval = new Thread(new BulletInterval());
+    BulletInterval bulletInterval = new BulletInterval();
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-    double xBulletVel,yBulletVel = 5;
+    double xBulletVel, yBulletVel = 5;
 
     int PLAYER_HEALTH = 3;
     int PLAYER_SHIELD = 0;
@@ -56,88 +57,99 @@ public class Player extends Entity {
     }
 
     public void update() {
-        if (keyHandler.upPressed) {
-            if (yVel <= -Config.playerSpeed) {
-                yVel = -Config.playerSpeed;
-            } else {
-                yVel = yVel - Config.playerSpeed/Config.playerSpeedSlowdown;
-            }
-        }
-        if (keyHandler.downPressed) {
-            if (yVel >= Config.playerSpeed) {
-                yVel = Config.playerSpeed;
-            } else {
-                yVel = yVel + Config.playerSpeed/Config.playerSpeedSlowdown;
-            }
-        }
-        if (keyHandler.leftPressed) {
-            if (xVel <= -Config.playerSpeed) {
-                xVel = -Config.playerSpeed;
-            } else {
-                xVel = xVel - Config.playerSpeed/Config.playerSpeedSlowdown;
-            }
-        }
-        if (keyHandler.rightPressed) {
-            if (xVel >= Config.playerSpeed) {
-                xVel = Config.playerSpeed;
-            } else {
-                xVel = xVel + Config.playerSpeed/Config.playerSpeedSlowdown;
-            }
-        }
-        yVel = yVel/Config.gravity;
-        xVel = xVel/Config.gravity;
+        if (getPLAYER_HEALTH() > 0) {
 
-        if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
-            sprite_Y = 0;
+            if (keyHandler.upPressed) {
+                if (yVel <= -Config.playerSpeed) {
+                    yVel = -Config.playerSpeed;
+                } else {
+                    yVel = yVel - Config.playerSpeed / Config.playerSpeedSlowdown;
+                }
+            }
+            if (keyHandler.downPressed) {
+                if (yVel >= Config.playerSpeed) {
+                    yVel = Config.playerSpeed;
+                } else {
+                    yVel = yVel + Config.playerSpeed / Config.playerSpeedSlowdown;
+                }
+            }
+            if (keyHandler.leftPressed) {
+                if (xVel <= -Config.playerSpeed) {
+                    xVel = -Config.playerSpeed;
+                } else {
+                    xVel = xVel - Config.playerSpeed / Config.playerSpeedSlowdown;
+                }
+            }
+            if (keyHandler.rightPressed) {
+                if (xVel >= Config.playerSpeed) {
+                    xVel = Config.playerSpeed;
+                } else {
+                    xVel = xVel + Config.playerSpeed / Config.playerSpeedSlowdown;
+                }
+            }
+            yVel = yVel / Config.gravity;
+            xVel = xVel / Config.gravity;
+
+            if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
+                sprite_Y = 0;
+            } else {
+                sprite_Y = 1;
+            }
+            y = y + yVel;
+            x = x + xVel;
+
+            if (y < 0) {
+                y = 0;
+            }
+            if (y > (Config.windowHeight - Config.tileComputed)) {
+                y = (Config.windowHeight - Config.tileComputed);
+            }
+            if (x < 0) {
+                x = 0;
+            }
+            if (x + Config.tileComputed > (Config.windowWidth)) {
+                x = (Config.windowWidth - Config.tileComputed);
+            }
+
+            if (keyHandler.upPressed && keyHandler.rightPressed) {
+                sprite_X = 4;
+                playerFace = Face.UP_RIGHT;
+            } else if (keyHandler.upPressed && keyHandler.leftPressed) {
+                sprite_X = 5;
+                playerFace = Face.UP_LEFT;
+            } else if (keyHandler.downPressed && keyHandler.leftPressed) {
+                sprite_X = 6;
+                playerFace = Face.DOWN_LEFT;
+            } else if (keyHandler.downPressed && keyHandler.rightPressed) {
+                sprite_X = 7;
+                playerFace = Face.DOWN_RIGHT;
+            } else if (keyHandler.upPressed) {
+                sprite_X = 0;
+                playerFace = Face.UP;
+            } else if (keyHandler.downPressed) {
+                sprite_X = 2;
+                playerFace = Face.DOWN;
+            } else if (keyHandler.rightPressed) {
+                sprite_X = 1;
+                playerFace = Face.RIGHT;
+            } else if (keyHandler.leftPressed) {
+                sprite_X = 3;
+                playerFace = Face.LEFT;
+            }
+
+            if (keyHandler.spacePressed) {
+                if (bulletInterval.canShot()) {
+                    bullets.add(new Bullet((int) x, (int) y, playerFace));
+                    bulletInterval.shot();
+                }
+            }
         } else {
-            sprite_Y = 1;
+            sprite_Y = 2;
         }
+    }
 
-        if (keyHandler.upPressed && keyHandler.rightPressed) {
-            sprite_X = 4;
-            playerFace = Face.UP_RIGHT;
-        } else if (keyHandler.upPressed && keyHandler.leftPressed) {
-            sprite_X = 5;
-            playerFace = Face.UP_LEFT;
-        } else if (keyHandler.downPressed && keyHandler.leftPressed) {
-            sprite_X = 6;
-            playerFace = Face.DOWN_LEFT;
-        } else if (keyHandler.downPressed && keyHandler.rightPressed) {
-            sprite_X = 7;
-            playerFace = Face.DOWN_RIGHT;
-        } else if (keyHandler.upPressed) {
-            sprite_X = 0;
-            playerFace = Face.UP;
-        } else if (keyHandler.downPressed) {
-            sprite_X = 2;
-            playerFace = Face.DOWN;
-        } else if (keyHandler.rightPressed) {
-            sprite_X = 1;
-            playerFace = Face.RIGHT;
-        } else if (keyHandler.leftPressed) {
-            sprite_X = 3;
-            playerFace = Face.LEFT;
-        }
-
-        y = y + yVel;
-        x = x + xVel;
-
-        if (y < 0) { y = 0; }
-        if (y > (Config.windowHeight - Config.tileComputed)) {
-            y = (Config.windowHeight - Config.tileComputed);
-        }
-        if (x < 0) { x = 0; }
-        if (x + Config.tileComputed > (Config.windowWidth)) {
-            x = (Config.windowWidth - Config.tileComputed);
-        }
-
-        if (keyHandler.spacePressed) {
-            if (!bulletInterval.isAlive()) {
-                bullets.add(new Bullet(x,y,playerFace));
-                bulletInterval.start();
-            }
-        }
-        System.out.println(bulletInterval.isAlive());
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
     }
 
     public void draw(Graphics2D graphics2D) {
@@ -184,6 +196,7 @@ public class Player extends Entity {
                 if (bullet.x > (Config.windowWidth + Config.tileComputed) || bullet.x < (-Config.tileComputed) || bullet.y > (Config.windowHeight + Config.tileComputed) || bullet.y < (-Config.tileComputed)) {
                     bullets.remove(i);
                 }
+                // if (bullet.getRect().intersects())
             }
         }
         graphics2D.drawImage(sprites[sprite_X][sprite_Y], (int) x, (int) y, Config.tileComputed, Config.tileComputed, null);

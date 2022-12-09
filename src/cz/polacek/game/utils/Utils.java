@@ -7,6 +7,10 @@ public class Utils {
         Random r = new Random();
         return r.nextInt(max - min) + min;
     }
+    public static double randomDoubleBetween(double min, double max) {
+        Random r = new Random();
+        return r.nextDouble(max - min) + min;
+    }
 
     public static int[] randomArray(int length, int min, int max) {
         int[] ints = new int[length];
