@@ -9,6 +9,7 @@ public  class Config {
     static public int tile = 16;
     static public double playerSpeed = (tile / 10) * scale;
     static public double playerSpeedSlowdown = 16;
+    static public double bulletSpeed = (tile / 5) * scale;
     static public double gravity = 1.01;
     static public int tileComputed = tile * scale;
     static public int windowWidth = (tileComputed * 20);

@@ -3,7 +3,7 @@ package cz.polacek.game.view;
 import cz.polacek.game.config.Config;
 import cz.polacek.game.view.entity.Background;
 import cz.polacek.game.view.entity.GUI;
-import cz.polacek.game.view.entity.Player;
+import cz.polacek.game.view.entity.player.Player;
 import cz.polacek.game.view.keylistener.KeyHandler;
 
 import javax.swing.*;

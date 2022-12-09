@@ -3,6 +3,7 @@ package cz.polacek.game.view.entity;
 import cz.polacek.game.config.Config;
 import cz.polacek.game.utils.SpritesheetUtils;
 import cz.polacek.game.view.Panel;
+import cz.polacek.game.view.entity.player.Player;
 import cz.polacek.game.view.keylistener.KeyHandler;
 
 import java.awt.*;
