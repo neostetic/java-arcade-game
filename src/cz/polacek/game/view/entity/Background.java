@@ -74,11 +74,7 @@ public class Background extends Entity {
     int[] randomArray2 = Utils.randomArray(1000, 4,7);
 
     public void draw(Graphics2D graphics2D) {
-        for (int i = 0; i < Config.windowWidth / Config.tileComputed; i++) {
-            for (int j = 0; j < Config.windowHeight / Config.tileComputed; j++) {
-                graphics2D.drawImage(sprites[0][8], Config.tileComputed * i, Config.tileComputed * j, Config.tileComputed, Config.tileComputed, null);
-            }
-        }
+            graphics2D.drawImage(sprites[0][8], 0, 0, Config.windowWidth, Config.windowHeight, null);
         for (int i = 0; i < Config.windowWidth / Config.tileComputed + 2; i++) {
             for (int j = 0; j < Config.windowHeight / Config.tileComputed + 2; j++) {
                 int computedX = (int) x + Config.tileComputed * i;
