@@ -30,7 +30,7 @@ public class Powerup extends Entity {
     }
 
     public void pickUp() {
-        // FIXME
+        // FIXME - make pickups work
         if (powerupType == PowerupType.HEALTH) {
             panel.getPlayer().setPLAYER_HEALTH(panel.getPlayer().getPLAYER_HEALTH() + 1);
         } else if (powerupType == PowerupType.SHIELD) {
