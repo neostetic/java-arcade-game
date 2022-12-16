@@ -2,11 +2,8 @@ package cz.polacek.game.view;
 
 import cz.polacek.game.config.Config;
 import cz.polacek.game.utils.Utils;
-import cz.polacek.game.view.entity.Background;
-import cz.polacek.game.view.entity.Enemy;
-import cz.polacek.game.view.entity.GUI;
+import cz.polacek.game.view.entity.*;
 import cz.polacek.game.view.entity.player.Bullet;
-import cz.polacek.game.view.entity.Interval;
 import cz.polacek.game.view.entity.player.Player;
 import cz.polacek.game.view.keylistener.KeyHandler;
 
@@ -19,11 +16,15 @@ public class Panel extends JPanel implements Runnable {
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
     Player player = new Player(this, keyHandler);
-//    Enemy enemy = new Enemy(this, 0, 0, 1, 1);
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     Interval enemySpawnInterval = new Interval(Config.enemySpawnInterval);
+    Interval powerupSpawnInterval = new Interval(Config.enemySpawnInterval);
     Background background = new Background(this, player, keyHandler);
     GUI gui = new GUI(this, keyHandler, player);
+
+    public Player getPlayer() {
+        return player;
+    }
 
     private final int FPS = Config.prefferedFPS;
 
@@ -51,7 +52,7 @@ public class Panel extends JPanel implements Runnable {
             repaint();
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
-                remainingTime = remainingTime/1000000;
+                remainingTime = remainingTime / 1000000;
                 if (remainingTime < 0) {
                     remainingTime = 0;
                 }
@@ -70,9 +71,7 @@ public class Panel extends JPanel implements Runnable {
             for (int j = 0; j < enemies.size(); j++) {
                 if (i != j) {
                     if (enemies.get(i).getRect().intersects(enemies.get(j).getRect())) {
-                        enemies.get(i).setxVel(0);
-                        enemies.get(i).setyVel(0);
-                        System.out.println(enemies.get(i).getxVel());
+                        setVecCollision(enemies.get(i), enemies.get(j));
                     }
                 }
             }
@@ -117,9 +116,29 @@ public class Panel extends JPanel implements Runnable {
         gui.update();
         if (enemySpawnInterval.canDo()) {
             int[] randomPosition = Utils.randomSpawnLocation();
-            enemies.add(new Enemy(this, randomPosition[0], randomPosition[1], Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity), Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity)));
+            boolean doesSpawnCollide = false;
+            while (!doesSpawnCollide) {
+                for (Enemy enemy : enemies) {
+                    if (enemy.getRect().intersects(new Rectangle(randomPosition[0], randomPosition[1], Config.tileComputed, Config.tileComputed))) {
+                        doesSpawnCollide = true;
+                    }
+                }
+                if (!doesSpawnCollide) {
+                    enemies.add(new Enemy(this, randomPosition[0], randomPosition[1], Utils.randomDoubleBetween(-Config.maxEnemyVelocity, Config.maxEnemyVelocity), Utils.randomDoubleBetween(-Config.maxEnemyVelocity, Config.maxEnemyVelocity)));
+                }
+            }
+            // enemies.add(new Enemy(this, randomPosition[0], randomPosition[1], Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity), Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity)));
             enemySpawnInterval.did();
         }
+    }
+
+    private void setVecCollision(Enemy enemy, Enemy enemy1) {
+        double newXVec = enemy1.getxVel() + enemy.getxVel();
+        double newYVec = enemy1.getyVel() + enemy.getyVel();
+
+        double size = Math.sqrt(Math.pow(newXVec, 2) + Math.pow(newYVec, 2));
+        enemy.setxVel(newXVec / size * Config.maxEnemyVelocity);
+        enemy.setyVel(newYVec / size * Config.maxEnemyVelocity);
     }
 
     public void paintComponent(Graphics graphics) {

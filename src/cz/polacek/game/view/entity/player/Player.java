@@ -33,6 +33,7 @@ public class Player extends Entity {
     }
 
     public void setPLAYER_HEALTH(int PLAYER_HEALTH) {
+        // FIXME - max health
         this.PLAYER_HEALTH = PLAYER_HEALTH;
     }
 
@@ -41,6 +42,7 @@ public class Player extends Entity {
     }
 
     public void setPLAYER_SHIELD(int PLAYER_SHIELD) {
+        // FIXME - max shield
         this.PLAYER_SHIELD = PLAYER_SHIELD;
     }
 

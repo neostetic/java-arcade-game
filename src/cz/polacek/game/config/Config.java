@@ -15,7 +15,8 @@ public  class Config {
     static public int windowWidth = (tileComputed * 20);
     static public int windowHeight = (tileComputed * 15);
     static public int enemySpawnInterval = 100;
+    static public int powerupSpawnInterval = 2000;
     static public int maxEnemyVelocity = 2;
-    static public int bulletInterval = 100;
+    static public int bulletInterval = 300;
     static public int prefferedFPS = 60;
 }
