@@ -6,17 +6,17 @@
 #### Information
  - **Name:** java-arcade-game
  - **Version:** 1.0.0
-#### Dependencies
- - Dependencie
+#### Description
+ - todo
 #### Download Content
  - **License:** [LICENSE](./LICENSE)
 #### Install
  - Installation via **nodejs** and **npm**
 ```
 git clone https://github.com/neostetic/java-arcade-game.git
-npm i
-npm start
 ```
+#### TODO List
+ - [x] Todo
 #### Legal actions
  - Please, before using or cloning this project, read our [License Terms](./LICENSE).
  - **By cloning, you are agreeing to the license and its intent.**
