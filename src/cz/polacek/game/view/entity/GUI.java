@@ -68,6 +68,6 @@ public class GUI extends Entity {
         graphics2D.drawImage(sprites[heart2][6], Config.tileComputed, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
         graphics2D.drawImage(sprites[heart3][6], Config.tileComputed * 2, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
         graphics2D.drawImage(sprites[shield1][6], Config.tileComputed * 3, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
-        graphics2D.drawImage(sprites[shield1][6], Config.tileComputed * 4, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
+        graphics2D.drawImage(sprites[shield2][6], Config.tileComputed * 4, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
     }
 }

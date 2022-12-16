@@ -13,6 +13,7 @@ public class Enemy extends Entity {
 
     Panel panel;
     BufferedImage[][] sprites;
+    boolean destroyed;
 
     public Enemy(Panel panel, double x, double y, double xVel, double yVel) {
         this.panel = panel;
@@ -20,7 +21,25 @@ public class Enemy extends Entity {
         this.y = y;
         this.xVel = xVel;
         this.yVel = yVel;
+        this.destroyed = false;
         sprites = spritesheetUtils.spritesheetToSprites("../assets/spritesheet.png");
+    }
+
+    public void getHit() {
+        destroyed = true;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
+    }
+
+    public void setVector(double xVector, double yVector) {
+        xVel = xVector;
+        yVel = yVector;
     }
 
     public void update() {
@@ -29,6 +48,10 @@ public class Enemy extends Entity {
     }
 
     public void draw(Graphics2D graphics2D) {
-        graphics2D.drawImage(sprites[0][5], (int) x, (int) y, Config.tileComputed, Config.tileComputed, null);
+        if (x > 0 || x < Config.windowWidth + Config.tileComputed || y > 0 || y < Config.windowHeight + Config.tileComputed) {
+            graphics2D.drawImage(sprites[0][5], (int) x, (int) y, Config.tileComputed, Config.tileComputed, null);
+        } else {
+            destroyed = true;
+        }
     }
 }

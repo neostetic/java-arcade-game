@@ -3,8 +3,8 @@ package cz.polacek.game.view.entity.player;
 import cz.polacek.game.config.Config;
 import cz.polacek.game.utils.SpritesheetUtils;
 import cz.polacek.game.view.Panel;
-import cz.polacek.game.view.entity.Background;
 import cz.polacek.game.view.entity.Entity;
+import cz.polacek.game.view.entity.Interval;
 import cz.polacek.game.view.keylistener.KeyHandler;
 
 import java.awt.*;
@@ -19,12 +19,12 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     BufferedImage[][] sprites;
 
-    BulletInterval bulletInterval = new BulletInterval();
+    Interval bulletInterval = new Interval(Config.bulletInterval);
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     double xBulletVel, yBulletVel = 5;
 
     int PLAYER_HEALTH = 3;
-    int PLAYER_SHIELD = 0;
+    int PLAYER_SHIELD = 2;
 
     Face playerFace;
 
@@ -87,16 +87,12 @@ public class Player extends Entity {
                     xVel = xVel + Config.playerSpeed / Config.playerSpeedSlowdown;
                 }
             }
-            yVel = yVel / Config.gravity;
-            xVel = xVel / Config.gravity;
 
             if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
                 sprite_Y = 0;
             } else {
                 sprite_Y = 1;
             }
-            y = y + yVel;
-            x = x + xVel;
 
             if (y < 0) {
                 y = 0;
@@ -138,18 +134,30 @@ public class Player extends Entity {
             }
 
             if (keyHandler.spacePressed) {
-                if (bulletInterval.canShot()) {
+                if (bulletInterval.canDo()) {
                     bullets.add(new Bullet((int) x, (int) y, playerFace));
-                    bulletInterval.shot();
+                    bulletInterval.did();
                 }
             }
         } else {
             sprite_Y = 2;
         }
+        yVel = yVel / Config.gravity;
+        xVel = xVel / Config.gravity;
+        y = y + yVel;
+        x = x + xVel;
     }
 
     public ArrayList<Bullet> getBullets() {
         return bullets;
+    }
+
+    public void getHit() {
+        if (PLAYER_SHIELD != 0) {
+            setPLAYER_SHIELD(getPLAYER_SHIELD() - 1);
+        } else {
+            setPLAYER_HEALTH(getPLAYER_HEALTH() - 1);
+        }
     }
 
     public void draw(Graphics2D graphics2D) {
