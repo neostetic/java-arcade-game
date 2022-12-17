@@ -20,7 +20,7 @@
 git clone https://github.com/neostetic/java-arcade-game.git
 ```
 #### TODO List
- - [x] Todo
+ - [x] working high record
 #### Legal actions
  - Please, before using or cloning this project, read our [License Terms](./LICENSE).
  - **By cloning, you are agreeing to the license and its intent.**
