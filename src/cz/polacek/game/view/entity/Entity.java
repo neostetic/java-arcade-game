@@ -16,6 +16,7 @@ public class Entity {
             spritesheetUtils.spritesheetToSpritesSingle("../assets/font.png"),
             spritesheetUtils.spritesheetToSpritesSingle("../assets/font_outline.png"),
             spritesheetUtils.spritesheetToSpritesSingle("../assets/font_seethrough.png"),
+            spritesheetUtils.spritesheetToSpritesSingle("../assets/font_rainbow.png"),
     };
 
     public Rectangle getRect() {
