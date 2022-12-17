@@ -12,10 +12,31 @@ public class SpritesheetUtils {
     public BufferedImage[][] spritesheetToSprites(String url) {
         try {
             BufferedImage spritesheet = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(url)));
-            BufferedImage[][] sprites = new BufferedImage[spritesheet.getWidth()/16][spritesheet.getHeight()/16];
+            BufferedImage[][] sprites = new BufferedImage[spritesheet.getWidth() / 16][spritesheet.getHeight() / 16];
             for (int i = 0; i < sprites.length; i++) {
                 for (int j = 0; j < sprites[0].length; j++) {
                     sprites[i][j] = spritesheet.getSubimage(
+                            i * Config.tile,
+                            j * Config.tile,
+                            Config.tile,
+                            Config.tile
+                    );
+                }
+            }
+            return sprites;
+        } catch (IOException e) {
+            new WindowError(e.toString());
+        }
+        return null;
+    }
+
+    public BufferedImage[] spritesheetToSpritesSingle(String url) {
+        try {
+            BufferedImage spritesheet = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(url)));
+            BufferedImage[] sprites = new BufferedImage[spritesheet.getWidth() / 16 * spritesheet.getHeight() / 16];
+            for (int i = 0; i < spritesheet.getWidth() / 16; i++) {
+                for (int j = 0; j < spritesheet.getHeight() / 16; j++) {
+                    sprites[i+j*spritesheet.getWidth() / 16] = spritesheet.getSubimage(
                             i * Config.tile,
                             j * Config.tile,
                             Config.tile,

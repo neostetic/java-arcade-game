@@ -1,18 +1,13 @@
 package cz.polacek.game.view.entity;
 
 import cz.polacek.game.config.Config;
-import cz.polacek.game.utils.SpritesheetUtils;
 import cz.polacek.game.view.Panel;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Enemy extends Entity {
 
-    SpritesheetUtils spritesheetUtils = new SpritesheetUtils();
-
     Panel panel;
-    BufferedImage[][] sprites;
     boolean destroyed;
 
     public Enemy(Panel panel, double x, double y, double xVel, double yVel) {
@@ -22,7 +17,6 @@ public class Enemy extends Entity {
         this.xVel = xVel;
         this.yVel = yVel;
         this.destroyed = false;
-        sprites = spritesheetUtils.spritesheetToSprites("../assets/spritesheet.png");
     }
 
     public void getHit() {

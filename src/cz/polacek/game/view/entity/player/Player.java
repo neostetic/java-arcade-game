@@ -1,30 +1,36 @@
 package cz.polacek.game.view.entity.player;
 
 import cz.polacek.game.config.Config;
-import cz.polacek.game.utils.SpritesheetUtils;
+import cz.polacek.game.utils.Utils;
 import cz.polacek.game.view.Panel;
 import cz.polacek.game.view.entity.Entity;
 import cz.polacek.game.view.entity.Interval;
-import cz.polacek.game.view.keylistener.KeyHandler;
+import cz.polacek.game.view.handler.KeyHandler;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends Entity {
 
-    SpritesheetUtils spritesheetUtils = new SpritesheetUtils();
-
     Panel panel;
     KeyHandler keyHandler;
-    BufferedImage[][] sprites;
 
-    Interval bulletInterval = new Interval(Config.bulletInterval);
+    int bulletIntervalInterval = Config.bulletInterval;
+
+    Interval bulletInterval = new Interval(bulletIntervalInterval);
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     double xBulletVel, yBulletVel = 5;
 
-    int PLAYER_HEALTH = 3;
-    int PLAYER_SHIELD = 2;
+    public void setBulletIntervalInterval(int bulletIntervalInterval) {
+        bulletInterval.setInterval(bulletIntervalInterval);
+    }
+
+    public int getBulletIntervalInterval() {
+        return bulletIntervalInterval;
+    }
+
+    int PLAYER_HEALTH = Config.maxPlayerHealth;
+    int PLAYER_SHIELD = Config.maxPlayerShield;
 
     Face playerFace;
 
@@ -33,8 +39,7 @@ public class Player extends Entity {
     }
 
     public void setPLAYER_HEALTH(int PLAYER_HEALTH) {
-        // FIXME - max health
-        this.PLAYER_HEALTH = PLAYER_HEALTH;
+        this.PLAYER_HEALTH = Math.min(PLAYER_HEALTH, Config.maxPlayerHealth);
     }
 
     public int getPLAYER_SHIELD() {
@@ -42,19 +47,18 @@ public class Player extends Entity {
     }
 
     public void setPLAYER_SHIELD(int PLAYER_SHIELD) {
-        // FIXME - max shield
-        this.PLAYER_SHIELD = PLAYER_SHIELD;
+        this.PLAYER_SHIELD = Math.min(PLAYER_SHIELD, Config.maxPlayerShield);
     }
 
     int sprite_X = 0;
     int sprite_Y = 0;
+    private int deadSwitcherino = 0;
 
     public Player(Panel panel, KeyHandler keyHandler) {
         this.panel = panel;
         this.keyHandler = keyHandler;
         x = (Config.windowWidth / 2) - Config.tileComputed / 2;
         y = (Config.windowHeight / 2) - Config.tileComputed / 2;
-        sprites = spritesheetUtils.spritesheetToSprites("../assets/spritesheet.png");
         bulletInterval.start();
     }
 
@@ -143,6 +147,7 @@ public class Player extends Entity {
             }
         } else {
             sprite_Y = 2;
+            deadSwitcherino++;
         }
         yVel = yVel / Config.gravity;
         xVel = xVel / Config.gravity;
@@ -202,13 +207,17 @@ public class Player extends Entity {
                 }
                 bullet.setX((bullet.getX() + xBulletVel));
                 bullet.setY((bullet.getY() + yBulletVel));
-                graphics2D.drawImage(sprites[0][3], (int) bullet.getX(), (int) bullet.getY(), Config.tileComputed, Config.tileComputed, null);
+                graphics2D.drawImage(sprites[Utils.randomNumberBetween(0,3)][3], (int) bullet.getX(), (int) bullet.getY(), Config.tileComputed, Config.tileComputed, null);
                 if (bullet.x > (Config.windowWidth + Config.tileComputed) || bullet.x < (-Config.tileComputed) || bullet.y > (Config.windowHeight + Config.tileComputed) || bullet.y < (-Config.tileComputed)) {
                     bullets.remove(i);
                 }
                 // if (bullet.getRect().intersects())
             }
         }
-        graphics2D.drawImage(sprites[sprite_X][sprite_Y], (int) x, (int) y, Config.tileComputed, Config.tileComputed, null);
+        if (getPLAYER_HEALTH() > 0) {
+            graphics2D.drawImage(sprites[sprite_X][sprite_Y], (int) x, (int) y, Config.tileComputed, Config.tileComputed, null);
+        } else {
+            graphics2D.drawImage(sprites[deadSwitcherino%8][sprite_Y], (int) x, (int) y, Config.tileComputed, Config.tileComputed, null);
+        }
     }
 }

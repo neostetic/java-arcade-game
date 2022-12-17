@@ -1,21 +1,26 @@
 package cz.polacek.game.view.entity;
 
 import cz.polacek.game.config.Config;
-import cz.polacek.game.utils.SpritesheetUtils;
 import cz.polacek.game.view.Panel;
 import cz.polacek.game.view.entity.player.Player;
-import cz.polacek.game.view.keylistener.KeyHandler;
+import cz.polacek.game.view.handler.KeyHandler;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class GUI extends Entity {
-    SpritesheetUtils spritesheetUtils = new SpritesheetUtils();
 
     Panel panel;
     KeyHandler keyHandler;
     Player player;
-    public BufferedImage[][] sprites;
+    GUITextEntity[] textEntities;
+
+    public GUITextEntity[] getTextEntities() {
+        return textEntities;
+    }
+
+    public void setTextEntities(GUITextEntity[] textEntities) {
+        this.textEntities = textEntities;
+    }
 
     int heart1,heart2,heart3,shield1,shield2;
 
@@ -23,7 +28,14 @@ public class GUI extends Entity {
         this.panel = panel;
         this.keyHandler = keyHandler;
         this.player = player;
-        sprites = spritesheetUtils.spritesheetToSprites("../assets/spritesheet.png");
+        this.textEntities = null;
+    }
+
+    public GUI(Panel panel, KeyHandler keyHandler, Player player, GUITextEntity[] textEntities) {
+        this.panel = panel;
+        this.keyHandler = keyHandler;
+        this.player = player;
+        this.textEntities = textEntities;
     }
 
     public void update() {
@@ -62,8 +74,15 @@ public class GUI extends Entity {
             }
         }
     }
-
+    
     public void draw(Graphics2D graphics2D) {
+        if (textEntities != null) {
+            for (GUITextEntity textEntity : textEntities) {
+                for (int j = 0; j < textEntity.text.length; j++) {
+                    graphics2D.drawImage(fonts[textEntity.fontId][textEntity.text[j]], (int) textEntity.positionX + Config.tileComputed * j, (int) textEntity.positionY, Config.tileComputed, Config.tileComputed, null);
+                }
+            }
+        }
         graphics2D.drawImage(sprites[heart1][6], 0, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
         graphics2D.drawImage(sprites[heart2][6], Config.tileComputed, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);
         graphics2D.drawImage(sprites[heart3][6], Config.tileComputed * 2, Config.windowHeight - Config.tileComputed, Config.tileComputed, Config.tileComputed, null);

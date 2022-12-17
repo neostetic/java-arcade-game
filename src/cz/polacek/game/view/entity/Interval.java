@@ -40,4 +40,12 @@ public class Interval extends Thread {
     public synchronized boolean canDo() {
         return canDo;
     }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
 }

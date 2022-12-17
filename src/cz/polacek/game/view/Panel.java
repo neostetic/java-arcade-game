@@ -5,7 +5,7 @@ import cz.polacek.game.utils.Utils;
 import cz.polacek.game.view.entity.*;
 import cz.polacek.game.view.entity.player.Bullet;
 import cz.polacek.game.view.entity.player.Player;
-import cz.polacek.game.view.keylistener.KeyHandler;
+import cz.polacek.game.view.handler.KeyHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,13 +13,24 @@ import java.util.ArrayList;
 
 public class Panel extends JPanel implements Runnable {
 
+    int score = 0;
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
     Player player = new Player(this, keyHandler);
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     Interval enemySpawnInterval = new Interval(Config.enemySpawnInterval);
-    Interval powerupSpawnInterval = new Interval(Config.enemySpawnInterval);
-    Background background = new Background(this, player, keyHandler);
+    Powerup powerup = new Powerup(this, player, 0, 0, 0);
+    Interval powerupSpawnInterval = new Interval(Config.powerupSpawnInterval);
+    Background background = new Background(this, player);
     GUI gui = new GUI(this, keyHandler, player);
 
     public Player getPlayer() {
@@ -47,6 +58,7 @@ public class Panel extends JPanel implements Runnable {
         double drawInterval = 1000000000 / FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
         enemySpawnInterval.start();
+        powerupSpawnInterval.start();
         while (gameThread != null) {
             update();
             repaint();
@@ -65,13 +77,14 @@ public class Panel extends JPanel implements Runnable {
     }
 
     public void update() {
+        if (player.getPLAYER_HEALTH() > 0) { score++; }
         background.update();
         player.update();
         for (int i = 0; i < enemies.size(); i++) {
             for (int j = 0; j < enemies.size(); j++) {
                 if (i != j) {
                     if (enemies.get(i).getRect().intersects(enemies.get(j).getRect())) {
-                        setVecCollision(enemies.get(i), enemies.get(j));
+                        // setVecCollision(enemies.get(i), enemies.get(j));
                     }
                 }
             }
@@ -88,6 +101,7 @@ public class Panel extends JPanel implements Runnable {
                         if (enemy.getRect().intersects(player.getBullets().get(i).getRect())) {
                             enemy.getHit();
                             player.getBullets().get(i).setDestroyed(true);
+                            score += 20;
                         }
                     }
                 }
@@ -130,6 +144,32 @@ public class Panel extends JPanel implements Runnable {
             // enemies.add(new Enemy(this, randomPosition[0], randomPosition[1], Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity), Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity)));
             enemySpawnInterval.did();
         }
+
+        if (powerupSpawnInterval.canDo()) {
+            powerup = new Powerup(this, player, Utils.randomNumberBetween(0, Config.windowWidth - Config.tileComputed), Utils.randomNumberBetween(0, Config.windowHeight - Config.tileComputed), Utils.randomNumberBetween(0,5));
+            powerupSpawnInterval.did();
+            player.setBulletIntervalInterval(Config.bulletInterval);
+        }
+        if (player.getRect().intersects(powerup.getRect())) {
+            powerup.pickUp();
+        }
+        GUITextEntity[] textEntities;
+        if (Config.debugMode) {
+            textEntities = new GUITextEntity[]{
+                    new GUITextEntity("SCORE:" + score, 1, 0, 0),
+                    new GUITextEntity("HP:" + player.getPLAYER_HEALTH(), 2, 0, Config.tileComputed * 2),
+                    new GUITextEntity("SP:" + player.getPLAYER_SHIELD(), 2, 0, Config.tileComputed * 3),
+                    new GUITextEntity("X():" + player.getX(), 2, 0, Config.tileComputed * 4),
+                    new GUITextEntity("Y():" + player.getY(), 2, 0, Config.tileComputed * 5),
+                    new GUITextEntity("XVEL():" + player.getxVel(), 2, 0, Config.tileComputed * 6),
+                    new GUITextEntity("YVEL():" + player.getyVel(), 2, 0, Config.tileComputed * 7),
+            };
+        } else {
+            textEntities = new GUITextEntity[]{
+                    new GUITextEntity("SCORE:" + score, 1, 0, 0),
+            };
+        }
+        gui.setTextEntities(textEntities);
     }
 
     private void setVecCollision(Enemy enemy, Enemy enemy1) {
@@ -145,6 +185,7 @@ public class Panel extends JPanel implements Runnable {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
         background.draw(graphics2D);
+        powerup.draw(graphics2D);
         player.draw(graphics2D);
         if (!enemies.isEmpty()) {
             synchronized (this) {

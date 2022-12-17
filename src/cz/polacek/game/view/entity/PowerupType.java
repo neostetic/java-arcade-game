@@ -4,5 +4,6 @@ public enum PowerupType {
     HEALTH,
     SHIELD,
     BULLET,
+    MONEY,
     RANDOM
 }
