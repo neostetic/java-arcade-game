@@ -20,7 +20,15 @@
 git clone https://github.com/neostetic/java-arcade-game.git
 ```
 #### TODO List
- - [x] working high record
+ - [x] Gameloop
+ - [x] Main menu (sort of)
+ - [ ] Record system
+   - [x] Basic high score
+   - [ ] Named list of high scores
+ - [ ] Rotating meteorites
+ - [ ] More enemies
+ - [ ] More powerups
+
 #### Legal actions
  - Please, before using or cloning this project, read our [License Terms](./LICENSE).
  - **By cloning, you are agreeing to the license and its intent.**
