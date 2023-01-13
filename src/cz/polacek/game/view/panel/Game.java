@@ -80,6 +80,17 @@ public class Game {
                     }
                     enemyIndex++;
                 }
+                for (int i = 0; i < panel.getEnemies().size(); i++) {
+                    if (panel.getEnemies().get(i).getX() < -200) {
+                        panel.getEnemies().remove(panel.getEnemies().get(i));
+                    } else if (panel.getEnemies().get(i).getX() > Config.windowWidth + 200) {
+                        panel.getEnemies().remove(panel.getEnemies().get(i));
+                    } else if (panel.getEnemies().get(i).getY() < -200) {
+                        panel.getEnemies().remove(panel.getEnemies().get(i));
+                    } else if (panel.getEnemies().get(i).getY() > Config.windowHeight + 200) {
+                        panel.getEnemies().remove(panel.getEnemies().get(i));
+                    }
+                }
             }
         }
         panel.getGui().update();
