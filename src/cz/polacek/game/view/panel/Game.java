@@ -81,7 +81,7 @@ public class Game {
                     enemyIndex++;
                 }
                 for (int i = 0; i < panel.getEnemies().size(); i++) {
-                    if (panel.getEnemies().get(i).getX() < -200) {
+                    if (panel.getEnemies().get(i).getX() < - 200) {
                         panel.getEnemies().remove(panel.getEnemies().get(i));
                     } else if (panel.getEnemies().get(i).getX() > Config.windowWidth + 200) {
                         panel.getEnemies().remove(panel.getEnemies().get(i));
@@ -94,21 +94,32 @@ public class Game {
             }
         }
         panel.getGui().update();
-        if (panel.getEnemySpawnInterval().canDo()) {
-            int[] randomPosition = Utils.randomSpawnLocation();
-            boolean doesSpawnCollide = false;
-            while (!doesSpawnCollide) {
-                for (Enemy enemy : panel.getEnemies()) {
-                    if (enemy.getRect().intersects(new Rectangle(randomPosition[0], randomPosition[1], Config.tileComputed, Config.tileComputed))) {
-                        doesSpawnCollide = true;
+        if (panel.getPlayer().getPLAYER_HEALTH() > 0) {
+            if (panel.getEnemySpawnInterval().canDo()) {
+                int[] randomPosition = Utils.randomSpawnLocation();
+                boolean doesSpawnCollide = false;
+                while (!doesSpawnCollide) {
+                    for (Enemy enemy : panel.getEnemies()) {
+                        if (enemy.getRect().intersects(new Rectangle(randomPosition[0], randomPosition[1], Config.tileComputed, Config.tileComputed))) {
+                            doesSpawnCollide = true;
+                        }
+                    }
+                    if (!doesSpawnCollide) {
+                        int xCalc;
+                        int yCalc;
+                        if (Utils.randomBoolean()) xCalc = 1;
+                        else xCalc = -1;
+                        if (Utils.randomBoolean()) yCalc = 1;
+                        else yCalc = -1;
+                        panel.getEnemies().add(new Enemy(panel, randomPosition[0], randomPosition[1],
+                                 xCalc * Utils.randomDoubleBetween(1, Config.maxEnemyVelocity),
+                                yCalc * Utils.randomDoubleBetween(1, Config.maxEnemyVelocity)
+                        ));
                     }
                 }
-                if (!doesSpawnCollide) {
-                    panel.getEnemies().add(new Enemy(panel, randomPosition[0], randomPosition[1], Utils.randomDoubleBetween(-Config.maxEnemyVelocity, Config.maxEnemyVelocity), Utils.randomDoubleBetween(-Config.maxEnemyVelocity, Config.maxEnemyVelocity)));
-                }
+                // enemies.add(new Enemy(this, randomPosition[0], randomPosition[1], Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity), Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity)));
+                panel.getEnemySpawnInterval().did();
             }
-            // enemies.add(new Enemy(this, randomPosition[0], randomPosition[1], Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity), Utils.randomDoubleBetween(-Config.maxEnemyVelocity,Config.maxEnemyVelocity)));
-            panel.getEnemySpawnInterval().did();
         }
 
         if (panel.getPowerupSpawnInterval().canDo()) {

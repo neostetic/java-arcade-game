@@ -140,11 +140,11 @@ public class Panel extends JPanel implements Runnable {
     private final int FPS = Config.prefferedFPS;
 
     public Panel() {
+        this.addKeyListener(keyHandler);
         this.setSize(new Dimension(Config.windowWidth, Config.windowHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true); // Better render
         this.setLayout(null);
-        this.addKeyListener(keyHandler);
         this.setFocusable(true);
     }
 
